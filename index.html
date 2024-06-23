@@ -36,6 +36,12 @@
         .results-container {
             display: none; /* Initially hide the results */
         }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: gray;
+            display: none; /* Initially hide the footer */
+        }
     </style>
 </head>
 <body>
@@ -50,6 +56,7 @@
         </form>
         
         <div class="results-container" id="results-container">
+            <h3>Rule no: 1, never trust anyone 😂😂😝</h3>
             <h1 id="student-name"></h1>
             <h2 id="result-message"></h2>
             <table>
@@ -68,6 +75,9 @@
                 </tbody>
             </table>
             <button class="go-back-button" onclick="goBack()">Go Back</button>
+            <div class="footer">
+                This was created by Karthik from Simhadri Engineering College
+            </div>
         </div>
 
         <audio id="submit-sound" src="submit.mp3" preload="auto"></audio>
@@ -84,6 +94,7 @@
             const resultMessageElement = document.getElementById('result-message');
             const resultsTableBody = document.getElementById('results-table-body');
             const goBackButton = document.querySelector('.go-back-button');
+            const footer = document.querySelector('.footer');
 
             const studentData = {
                 "226J1A0501": {
@@ -135,6 +146,12 @@
                     name: "S Bavani Shankar",
                     message: "All Subjects Pass",
                     results: "P"
+                },
+                "236J5A0506": {
+                    name: "K. Divya Deepthi",
+                    message: "All Subjects Pass",
+                    results: "P",
+                    specialMessage: "send my chats"
                 }
             };
 
@@ -182,6 +199,13 @@
                 document.querySelector('table').style.display = 'table';
                 goBackButton.style.display = 'inline-block';
                 resultsContainer.style.display = 'block';
+                footer.style.display = 'block';
+
+                if (student.specialMessage) {
+                    const specialMessage = document.createElement('h3');
+                    specialMessage.textContent = student.specialMessage;
+                    resultsContainer.appendChild(specialMessage);
+                }
 
                 setTimeout(() => {
                     document.getElementById('result-song').play();
@@ -198,6 +222,11 @@
                 document.getElementById('results-container').style.display = 'none';
                 document.querySelector('table').style.display = 'none';
                 document.querySelector('.go-back-button').style.display = 'none';
+                document.querySelector('.footer').style.display = 'none';
+                const specialMessage = document.querySelector('#results-container h3:last-child');
+                if (specialMessage && specialMessage.textContent === "send my chats") {
+                    specialMessage.remove();
+                }
             }, 1000); // Show form after 1 second
         }
     </script>
