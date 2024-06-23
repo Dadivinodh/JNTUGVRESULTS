@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JNTUGV Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: none; /* Initially hide the table */
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .go-back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: none; /* Initially hide the button */
+        }
+        .results-container {
+            display: none; /* Initially hide the results */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JNTUGV</h1>
+        <img src="logo.png" alt="JNTUGV Logo">
+        <h2>JNTUGV R-R20 2-2 Results</h2>
+        <form id="hall-ticket-form">
+            <label for="hallTicketNumber">Enter Hall Ticket Number:</label>
+            <input type="text" id="hallTicketNumber" name="hallTicketNumber" required>
+            <button type="submit">Submit</button>
+        </form>
+        
+        <div class="results-container" id="results-container">
+            <h1 id="student-name"></h1>
+            <h2 id="result-message"></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S. No</th>
+                        <th>Course Code</th>
+                        <th>Courses</th>
+                        <th>Result</th>
+                        <th>Grade</th>
+                        <th>Credits</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    <!-- Results will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <button class="go-back-button" onclick="goBack()">Go Back</button>
+        </div>
+
+        <audio id="submit-sound" src="submit.mp3" preload="auto"></audio>
+        <audio id="result-song" src="result.mp3" preload="auto"></audio>
+
+    <script>
+        document.getElementById('hall-ticket-form').onsubmit = function(event) {
+            event.preventDefault();
+            document.getElementById('submit-sound').play();
+
+            const hallTicketNumber = document.getElementById('hallTicketNumber').value.toUpperCase();
+            const resultsContainer = document.getElementById('results-container');
+            const studentNameElement = document.getElementById('student-name');
+            const resultMessageElement = document.getElementById('result-message');
+            const resultsTableBody = document.getElementById('results-table-body');
+            const goBackButton = document.querySelector('.go-back-button');
+
+            const studentData = {
+                "226J1A0501": {
+                    name: "Boddeda Suma Sree",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0503": {
+                    name: "Dadi Vinod",
+                    message: "All Subjects Fail",
+                    results: "F"
+                },
+                "226J1A0506": {
+                    name: "D Karthik Kumar",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0507": {
+                    name: "Gompa Uday Kiran",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0508": {
+                    name: "I Prasad",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0509": {
+                    name: "K Prasad",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0515": {
+                    name: "S Anil",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0516": {
+                    name: "S Siva Sai",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0517": {
+                    name: "V Murali Krishna",
+                    message: "All Subjects Pass",
+                    results: "P"
+                },
+                "226J1A0514": {
+                    name: "S Bavani Shankar",
+                    message: "All Subjects Pass",
+                    results: "P"
+                }
+            };
+
+            let student = studentData[hallTicketNumber];
+
+            if (!student && hallTicketNumber.startsWith("236J")) {
+                student = {
+                    name: hallTicketNumber,
+                    message: "All Subjects Pass",
+                    results: "P"
+                };
+            }
+
+            if (student) {
+                studentNameElement.textContent = student.name;
+                resultMessageElement.textContent = student.message;
+
+                const courses = [
+                    { number: 1, code: "BS", name: "Probability and Statistics", credits: 3 },
+                    { number: 2, code: "CS", name: "Database Management Systems", credits: 3 },
+                    { number: 3, code: "CS", name: "Formal Languages and Automata Theory", credits: 3 },
+                    { number: 4, code: "ES", name: "Java Programming", credits: 3 },
+                    { number: 5, code: "HS", name: "Managerial Economics and Financial Accountancy", credits: 3 },
+                    { number: 6, code: "CS", name: "Database Management Systems Lab", credits: 1 },
+                    { number: 7, code: "CS", name: "R Programming Lab", credits: 2 },
+                    { number: 8, code: "ES", name: "Java Programming Lab", credits: 1.5 },
+                    { number: 9, code: "SO", name: "Skill Oriented Course - II", credits: 2 }
+                ];
+
+                let tableBody = "";
+                courses.forEach(course => {
+                    tableBody += `
+                        <tr>
+                            <td>${course.number}</td>
+                            <td>${course.code}</td>
+                            <td>${course.name}</td>
+                            <td>${student.results}</td>
+                            <td>A+</td>
+                            <td>${course.credits}</td>
+                        </tr>
+                    `;
+                });
+
+                resultsTableBody.innerHTML = tableBody;
+                document.querySelector('table').style.display = 'table';
+                goBackButton.style.display = 'inline-block';
+                resultsContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    document.getElementById('result-song').play();
+                }, 3000); // Play song after 3 seconds
+            } else {
+                alert("Invalid Hall Ticket Number");
+            }
+        };
+
+        function goBack() {
+            document.getElementById("submit-sound").play();
+            setTimeout(() => {
+                document.getElementById('hall-ticket-form').style.display = 'block';
+                document.getElementById('results-container').style.display = 'none';
+                document.querySelector('table').style.display = 'none';
+                document.querySelector('.go-back-button').style.display = 'none';
+            }, 1000); // Show form after 1 second
+        }
+    </script>
+</body>
+</html>
